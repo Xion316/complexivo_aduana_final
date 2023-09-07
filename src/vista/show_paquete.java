@@ -1,0 +1,232 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vista;
+
+import java.io.IOException;
+import java.util.LinkedList;
+import javax.swing.table.DefaultTableModel;
+import controlador.FileHandler;
+import modelo.Aduana;
+import modelo.paquete;
+import modelo.paquete_decomisado;
+import modelo.paquete_entrega;
+
+/**
+ *
+ * @author hack2
+ */
+public class show_paquete extends javax.swing.JFrame {
+    private static main InterfazPrincipal;
+    private FileHandler handlerFile;
+    private Aduana EmpresaAduana;
+    /**
+     * Creates new form show_paquete
+     */
+    public show_paquete(main m) {
+        initComponents();
+        InterfazPrincipal = m;
+        
+        
+        
+        
+        EmpresaAduana = new Aduana();
+        handlerFile = new FileHandler();
+        
+         try {
+            EmpresaAduana.pushContenedores(handlerFile.LoadPaquetesMarcado());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes marcados como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes marcados que intenta cargar");
+        }
+        
+        try {
+            EmpresaAduana.pushContenedores(handlerFile.LoadPaquetesDecomisado());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes decomisados como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes decomisados que intenta cargar");
+        }
+        
+        try {
+            EmpresaAduana.pushContenedores(handlerFile.LoadPaquetesEntrega());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes entrega como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes entrega que intenta cargar");
+        }
+        
+        
+        if(EmpresaAduana!=null){
+            System.out.println("Existen los datos y son");
+            DefaultTableModel model = (DefaultTableModel) tabla_resultados.getModel(); // obtengo el table al que metere datos
+            
+            EmpresaAduana.ImpresionPaquetes();
+            LinkedList<paquete> componentes_imprimir = EmpresaAduana.getPaquetes();
+            
+            for(paquete object : componentes_imprimir) {
+                String tipo_componente=object.getClass().getSimpleName();
+                double volumen = object.getVolumen();
+                double peso = object.getPeso();
+                if(tipo_componente.toLowerCase().equals("paquete_decomisado")){
+                    paquete_decomisado paqueteDecomisadoTemp = (paquete_decomisado) object;
+                    String RazonDecomiso=paqueteDecomisadoTemp.getRazon_demcomiso();
+                    
+                    String CedulaPropietario=paqueteDecomisadoTemp.getPropietario_paquete().getCi();
+                    
+                    Object[] row = { String.valueOf(volumen),String.valueOf(peso),RazonDecomiso,CedulaPropietario};
+                    model.addRow(row);
+                }if(tipo_componente.toLowerCase().equals("paquete_entrega")){
+                    paquete_entrega paqueteEntregaTemp = (paquete_entrega) object;
+                    String CedulaPropietario=paqueteEntregaTemp.getPropietario_paquete().getCi();
+                    
+                     boolean debe_decomisar = object.paquete_debe_ser_decomisado();
+                     String valorDecomisado = "";
+                     if(debe_decomisar){
+                        valorDecomisado = "Pendiente por decomisar";
+                    }else{
+                        valorDecomisado = "No aplica";
+                    }
+                     
+                     
+                    Object[] row = { String.valueOf(volumen),String.valueOf(peso),valorDecomisado,CedulaPropietario};
+                    model.addRow(row);
+                } else{
+                    boolean debe_decomisar = object.paquete_debe_ser_decomisado();
+                    String valorDecomisado = "";
+                    
+                    if(debe_decomisar){
+                        valorDecomisado = "Pendiente por decomisar";
+                    }else{
+                        valorDecomisado = "No aplica";
+                    }
+                    
+                    Object[] row = { String.valueOf(volumen),String.valueOf(peso),valorDecomisado,"NO SE CONOCE"};
+                    model.addRow(row);
+                }
+    
+            }
+        }
+        
+        
+        
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        regresar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tabla_resultados = new javax.swing.JTable();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        regresar.setText("Regresar");
+        regresar.setToolTipText("");
+        regresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regresarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Listado de Paquetes");
+
+        tabla_resultados.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Volumen", "Peso", "Razon Decomiso", "Propietario"
+            }
+        ));
+        jScrollPane1.setViewportView(tabla_resultados);
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 982, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(regresar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(regresar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 463, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
+        // TODO add your handling code here:
+        InterfazPrincipal.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_regresarActionPerformed
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(show_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(show_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(show_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(show_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new show_paquete(InterfazPrincipal).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton regresar;
+    private javax.swing.JTable tabla_resultados;
+    // End of variables declaration//GEN-END:variables
+}

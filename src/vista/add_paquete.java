@@ -1,0 +1,833 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package vista;
+
+import java.util.LinkedList;
+import javax.swing.table.DefaultTableModel;
+import modelo.producto;
+import controlador.validaciones;
+import java.io.IOException;
+import static java.lang.String.valueOf;
+import javax.swing.JOptionPane;
+import modelo.Aduana;
+import modelo.paquete;
+import modelo.paquete_decomisado;
+import modelo.paquete_entrega;
+import modelo.paquete_marcado;
+import modelo.propietario;
+import controlador.FileHandler;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+/**
+ *
+ * @author hack2
+ */
+public class add_paquete extends javax.swing.JFrame {
+    
+    private static main IntefazPrincipal;
+    private LinkedList<producto> ListaproductosPaquete;
+    private Aduana EmpresaAduana;
+    private FileHandler HandleFile;
+    /**
+     * Creates new form add_paquete
+     */
+    public add_paquete(main m) {
+        initComponents();
+        IntefazPrincipal=m;
+        
+        String paqueteSeleccionado =  tipo_paquete.getSelectedItem().toString().trim().toLowerCase();
+        
+        ListaproductosPaquete = new LinkedList<>();
+        
+        switch(paqueteSeleccionado){
+            case "seleccionar":
+                panel_comunes.setVisible(false);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(false);
+            break;
+            case "paquete marcado":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(true);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(false);
+            break;
+            case "paquete decomisado":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(true);
+                panel_entrega.setVisible(false);
+            break;
+            case "paquete entrega":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(true);
+            break;
+            
+            default:
+        }
+        
+        EmpresaAduana = new Aduana();
+        
+        /// aqui cargo los paquetes en caso de existir cada uno desde su fichero
+        
+        
+         HandleFile = new FileHandler();
+        try {
+            EmpresaAduana.pushContenedores(HandleFile.LoadPaquetesMarcado());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes marcados como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes marcados que intenta cargar");
+        }
+        
+        try {
+            EmpresaAduana.pushContenedores(HandleFile.LoadPaquetesDecomisado());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes decomisados como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes decomisados que intenta cargar");
+        }
+        
+        try {
+            EmpresaAduana.pushContenedores(HandleFile.LoadPaquetesEntrega());
+        } catch (IOException ex) {
+            System.out.println("Aun no existe el archivo paquetes entrega como para cargarlo");
+        } catch (ClassNotFoundException ex) {
+            System.out.println("Error en el tipo de archivo paquetes entrega que intenta cargar");
+        }
+        
+        
+        
+        EmpresaAduana.ImpresionPaquetes();
+        
+ 
+    }
+
+    public void clearInputs(){
+        peso_paquete.setValue(0);
+        volumen_paquete.setValue(0);
+        is_fragil_paquete.setSelected(false);
+        ListaproductosPaquete = new LinkedList<>();
+        DefaultTableModel model = (DefaultTableModel) productos_paquete.getModel();
+        //model.getRowCount()
+        for (int i = model.getRowCount()-1 ; i > -1 ; i--) {
+            model.removeRow(i);
+        }
+ 
+        p_m_razonMarcado.setText("");
+        p_m_isdecomisado.setSelected(false);
+        p_m_notificar_propietario.setSelected(false);
+        p_de_razonDecomiso.setText("");
+        p_de_ciPropietario.setText("");
+        p_de_extranjero.setSelected(false);
+        p_de_cantidadPaquetesAduana.setValue(0);
+        p_ent_direccion_entregar.setText("");
+        p_ent_ciPropietario.setText("");
+        p_ent_extranjero.setSelected(false);
+        p_ent_cantidadPaquetesAduana.setValue(0);
+    }
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        regresar = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        tipo_paquete = new javax.swing.JComboBox<>();
+        panel_comunes = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        is_fragil_paquete = new javax.swing.JCheckBox();
+        peso_paquete = new javax.swing.JSpinner();
+        volumen_paquete = new javax.swing.JSpinner();
+        add_productos = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        productos_paquete = new javax.swing.JTable();
+        panel_marcados = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        p_m_razonMarcado = new javax.swing.JTextField();
+        p_m_isdecomisado = new javax.swing.JCheckBox();
+        p_m_notificar_propietario = new javax.swing.JCheckBox();
+        add_marcado = new javax.swing.JButton();
+        panel_decomisado = new javax.swing.JPanel();
+        jLabel5 = new javax.swing.JLabel();
+        p_de_razonDecomiso = new javax.swing.JTextField();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        p_de_ciPropietario = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        p_de_cantidadPaquetesAduana = new javax.swing.JSpinner();
+        p_de_extranjero = new javax.swing.JCheckBox();
+        add_decomisado = new javax.swing.JButton();
+        panel_entrega = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        p_ent_direccion_entregar = new javax.swing.JTextField();
+        p_ent_extranjero = new javax.swing.JCheckBox();
+        jLabel10 = new javax.swing.JLabel();
+        p_ent_cantidadPaquetesAduana = new javax.swing.JSpinner();
+        jLabel12 = new javax.swing.JLabel();
+        jLabel11 = new javax.swing.JLabel();
+        p_ent_ciPropietario = new javax.swing.JTextField();
+        add_entrega = new javax.swing.JButton();
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        regresar.setText("Regresar");
+        regresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                regresarActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("Añadir Paquete");
+
+        tipo_paquete.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Seleccionar", "Paquete marcado", "Paquete decomisado", "Paquete entrega" }));
+        tipo_paquete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tipo_paqueteActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Volumen :");
+
+        jLabel3.setText("Peso :");
+
+        is_fragil_paquete.setText("El paquete es fragil ?");
+
+        peso_paquete.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+
+        volumen_paquete.setModel(new javax.swing.SpinnerNumberModel(0.0d, 0.0d, null, 1.0d));
+
+        add_productos.setText("Añadir producto");
+        add_productos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_productosActionPerformed(evt);
+            }
+        });
+
+        productos_paquete.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Es plastico ( si no es metal) ", "nivel riesgo aduana"
+            }
+        ));
+        jScrollPane1.setViewportView(productos_paquete);
+
+        javax.swing.GroupLayout panel_comunesLayout = new javax.swing.GroupLayout(panel_comunes);
+        panel_comunes.setLayout(panel_comunesLayout);
+        panel_comunesLayout.setHorizontalGroup(
+            panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_comunesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_comunesLayout.createSequentialGroup()
+                        .addGroup(panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addGroup(panel_comunesLayout.createSequentialGroup()
+                                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(peso_paquete, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panel_comunesLayout.createSequentialGroup()
+                                .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(volumen_paquete))
+                            .addComponent(is_fragil_paquete, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jScrollPane1)
+                    .addComponent(add_productos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        panel_comunesLayout.setVerticalGroup(
+            panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_comunesLayout.createSequentialGroup()
+                .addGap(24, 24, 24)
+                .addGroup(panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(peso_paquete, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_comunesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(volumen_paquete, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(is_fragil_paquete, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(add_productos)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 180, Short.MAX_VALUE)
+                .addContainerGap())
+        );
+
+        jLabel4.setText("Razon marcado :");
+
+        p_m_isdecomisado.setText("El paquete sera decomisado ?");
+
+        p_m_notificar_propietario.setText("Se le notificara al propietario ?");
+
+        add_marcado.setText("Añadir Paquete");
+        add_marcado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_marcadoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_marcadosLayout = new javax.swing.GroupLayout(panel_marcados);
+        panel_marcados.setLayout(panel_marcadosLayout);
+        panel_marcadosLayout.setHorizontalGroup(
+            panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_marcadosLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_marcadosLayout.createSequentialGroup()
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(p_m_razonMarcado, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(p_m_isdecomisado, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panel_marcadosLayout.createSequentialGroup()
+                        .addComponent(p_m_notificar_propietario, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(add_marcado, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panel_marcadosLayout.setVerticalGroup(
+            panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_marcadosLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(p_m_razonMarcado, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
+                        .addComponent(p_m_isdecomisado)))
+                .addGap(18, 18, 18)
+                .addGroup(panel_marcadosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(p_m_notificar_propietario)
+                    .addComponent(add_marcado))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jLabel5.setText("Razon decomiso : ");
+
+        jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel6.setText("--------------- Propietario ---------------");
+
+        jLabel7.setText("Cédula: ");
+
+        jLabel8.setText("Cantidad Paquetes aduana cualquier tipo :");
+
+        p_de_cantidadPaquetesAduana.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
+        p_de_extranjero.setText("Es el propietario un extranjero ?");
+
+        add_decomisado.setText("Añadir Paquete");
+        add_decomisado.setToolTipText("");
+        add_decomisado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_decomisadoActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_decomisadoLayout = new javax.swing.GroupLayout(panel_decomisado);
+        panel_decomisado.setLayout(panel_decomisadoLayout);
+        panel_decomisadoLayout.setHorizontalGroup(
+            panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_decomisadoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panel_decomisadoLayout.createSequentialGroup()
+                        .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(p_de_razonDecomiso, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(panel_decomisadoLayout.createSequentialGroup()
+                        .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(p_de_ciPropietario)
+                            .addComponent(p_de_cantidadPaquetesAduana, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(p_de_extranjero, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel_decomisadoLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(add_decomisado, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
+        );
+        panel_decomisadoLayout.setVerticalGroup(
+            panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_decomisadoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(p_de_razonDecomiso, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_de_ciPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_de_extranjero))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_decomisadoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_de_cantidadPaquetesAduana, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+                .addComponent(add_decomisado)
+                .addContainerGap())
+        );
+
+        jLabel9.setText("Direccion a entregar : ");
+
+        p_ent_extranjero.setText("Es el propietario un extranjero ?");
+
+        jLabel10.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel10.setText("--------------- Propietario ---------------");
+
+        p_ent_cantidadPaquetesAduana.setModel(new javax.swing.SpinnerNumberModel(0, 0, null, 1));
+
+        jLabel12.setText("Cantidad Paquetes aduana cualquier tipo :");
+
+        jLabel11.setText("Cédula: ");
+
+        add_entrega.setText("Añadir Paquete");
+        add_entrega.setToolTipText("");
+        add_entrega.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                add_entregaActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panel_entregaLayout = new javax.swing.GroupLayout(panel_entrega);
+        panel_entrega.setLayout(panel_entregaLayout);
+        panel_entregaLayout.setHorizontalGroup(
+            panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_entregaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panel_entregaLayout.createSequentialGroup()
+                        .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(p_ent_direccion_entregar, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(panel_entregaLayout.createSequentialGroup()
+                        .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel12, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(p_ent_ciPropietario)
+                            .addComponent(p_ent_cantidadPaquetesAduana, javax.swing.GroupLayout.PREFERRED_SIZE, 253, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(p_ent_extranjero, javax.swing.GroupLayout.DEFAULT_SIZE, 224, Short.MAX_VALUE)
+                            .addGroup(panel_entregaLayout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(add_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, 154, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                .addContainerGap())
+        );
+        panel_entregaLayout.setVerticalGroup(
+            panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel_entregaLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(p_ent_direccion_entregar, javax.swing.GroupLayout.DEFAULT_SIZE, 31, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_ent_ciPropietario, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_ent_extranjero))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(panel_entregaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(p_ent_cantidadPaquetesAduana, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(add_entrega))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(regresar)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 296, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(tipo_paquete, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(28, 28, 28))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(panel_comunes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(panel_marcados, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(panel_entrega, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(panel_decomisado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap())))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(regresar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(tipo_paquete))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_comunes, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_marcados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_decomisado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel_entrega, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void regresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_regresarActionPerformed
+        // TODO add your handling code here:
+        IntefazPrincipal.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_regresarActionPerformed
+
+    private void tipo_paqueteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tipo_paqueteActionPerformed
+        // TODO add your handling code here:
+        
+        String paqueteSeleccionado =  tipo_paquete.getSelectedItem().toString().trim().toLowerCase();
+        switch(paqueteSeleccionado){
+            case "seleccionar":
+                panel_comunes.setVisible(false);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(false);
+                clearInputs();
+            break;
+            case "paquete marcado":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(true);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(false);
+                clearInputs();
+            break;
+            case "paquete decomisado":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(true);
+                panel_entrega.setVisible(false);
+                clearInputs();
+            break;
+            case "paquete entrega":
+                panel_comunes.setVisible(true);
+                panel_marcados.setVisible(false);
+                panel_decomisado.setVisible(false);
+                panel_entrega.setVisible(true);
+                clearInputs();
+            break;
+            
+            default:
+        }
+        
+    }//GEN-LAST:event_tipo_paqueteActionPerformed
+
+    
+    public void addProducto_al_Paquete(producto p) {
+       if(p!=null){
+           
+            ListaproductosPaquete.add(p);
+           
+            DefaultTableModel model = (DefaultTableModel) productos_paquete.getModel(); // obtengo el table al que metere datos
+            String es_plastico="";
+            if(p.isIs_plastico()){
+                es_plastico="SI";
+            }else{
+                es_plastico="NO";
+            }
+            Object[] row= {es_plastico,String.valueOf(p.getIndice_riesgo())};
+            model.addRow(row);
+        }
+    }
+    
+    
+    
+    private void add_productosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_productosActionPerformed
+        // TODO add your handling code here:
+        add_producto IntefazProducto = new add_producto(this);
+        IntefazProducto.setVisible(true);
+    }//GEN-LAST:event_add_productosActionPerformed
+
+    private void add_marcadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_marcadoActionPerformed
+        // TODO add your handling code here:
+        validaciones v = new validaciones();
+        if(v.isNumeroPositivo(peso_paquete.getValue().toString()) && Double.valueOf(peso_paquete.getValue().toString())>0){
+                if(v.isNumeroPositivo(volumen_paquete.getValue().toString()) && Double.valueOf(volumen_paquete.getValue().toString())>0){
+                    boolean isFragilPaquete = is_fragil_paquete.isSelected();
+                    if(ListaproductosPaquete.size()>0){
+                        /// aqui termina lo que tienen en comun
+                        if(v.is_StringCualquieraValidoNotEmpty(p_m_razonMarcado.getText())){
+                            boolean paquete_seraDecomisado = p_m_isdecomisado.isSelected();
+                            boolean se_notificaPropietario = p_m_notificar_propietario.isSelected();
+                            
+                            /// se añade el paquete
+                            //double peso, double volumen, boolean isFraguil, LinkedList<producto> conjunto_productos_entregar
+                            double peso=Double.valueOf(peso_paquete.getValue().toString());
+                            double volumen=Double.valueOf(volumen_paquete.getValue().toString());
+                            System.out.println("Añadiendo paquete a la empresa");
+                            paquete ptemporal = new paquete_marcado(p_m_razonMarcado.getText(),paquete_seraDecomisado,se_notificaPropietario,peso,volumen,isFragilPaquete,ListaproductosPaquete);
+                            EmpresaAduana.addPaquete(ptemporal);
+                            
+                            try {
+                                /// luego se salvara en el fichero este paquete
+                                HandleFile.SavePaquetesMarcado(EmpresaAduana);
+                                showMsg("Agregado correctamente Paquete Marcado");
+                            } catch (IOException ex) {
+                                showMsg("Error no se pudo guardar en el fichero");
+                            }
+                            
+                            System.out.println("procedo a imprimir paquetes");
+                            EmpresaAduana.ImpresionPaquetes();
+                            clearInputs();
+                            
+                        }else{
+                            showMsg("Indique una razon valida del marcado");
+                        }
+                    }else{
+                        showMsg("Ingrese al menos un producto al paquete para continuar");
+                    }  
+                }else{
+                    showMsg("Error ingrese un valor valido para el volumen del paquete, mayor que cero");
+                }
+        }else{
+            showMsg("Error ingrese un valor valido para el peso del paquete, mayor que cero");
+        }
+    }//GEN-LAST:event_add_marcadoActionPerformed
+
+    private void add_decomisadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_decomisadoActionPerformed
+        // TODO add your handling code here:
+        
+         validaciones v = new validaciones();
+        if(v.isNumeroPositivo(peso_paquete.getValue().toString()) && Double.valueOf(peso_paquete.getValue().toString())>0){
+                if(v.isNumeroPositivo(volumen_paquete.getValue().toString()) && Double.valueOf(volumen_paquete.getValue().toString())>0){
+                    boolean isFragilPaquete = is_fragil_paquete.isSelected();
+                    if(ListaproductosPaquete.size()>0){
+                        /// aqui termina lo que tienen en comun
+                        
+                        if(v.is_StringCualquieraValidoNotEmpty(p_de_razonDecomiso.getText())){
+                            
+                            /// bloque propietario 
+                            
+                            if(v.is_StringCualquieraValidoNotEmpty(p_de_ciPropietario.getText())){
+                                boolean es_extranjero = p_de_extranjero.isSelected();
+                                if(v.seeIfNumberIsIntegerPositivo(p_de_cantidadPaquetesAduana.getValue().toString()) && Double.parseDouble(p_de_cantidadPaquetesAduana.getValue().toString())>0){
+                                    /// listo añado el paquete a la empresa
+                                    
+                                   System.out.println("Añadiendo paquete a la empresa"); 
+                                    double peso=Double.valueOf(peso_paquete.getValue().toString());
+                                    double volumen=Double.valueOf(volumen_paquete.getValue().toString());
+                                    propietario p = new propietario(p_de_ciPropietario.getText(), es_extranjero, Integer.parseInt(p_de_cantidadPaquetesAduana.getValue().toString()));
+                                    paquete ptemporal = new paquete_decomisado(p_de_razonDecomiso.getText(),p,peso,volumen,isFragilPaquete,ListaproductosPaquete);
+                                    EmpresaAduana.addPaquete(ptemporal);
+                                   
+                                        try {
+                                            /// luego se salvara en el fichero este paquete
+                                            HandleFile.SavePaquetesDecomisado(EmpresaAduana);
+                                            showMsg("Agregado correctamente Paquete Decomisado");
+                                        } catch (IOException ex) {
+                                            showMsg("Error no se pudo guardar en el fichero");
+                                        }
+                                    
+                                   System.out.println("procedo a imprimir paquetes");
+                                    EmpresaAduana.ImpresionPaquetes();
+                                    clearInputs();
+                                    
+                                }else{
+                                    showMsg("Porfavor ingrese un valor valido para cantidad de paquetes en la aduana deben ser mayor que cero");
+                                }
+                            }else{
+                                showMsg("Porfavor ingrese un numero de cedula valido");
+                            } 
+                            
+                            
+                            
+                        }else{
+                            showMsg("Porfavor ingrese una razon valida para el decomiso");
+                        }   
+                    }else{
+                        showMsg("Ingrese al menos un producto al paquete para continuar");
+                    }  
+                }else{
+                    showMsg("Error ingrese un valor valido para el volumen del paquete, mayor que cero");
+                }
+        }else{
+            showMsg("Error ingrese un valor valido para el peso del paquete, mayor que cero");
+        }
+        
+        
+    }//GEN-LAST:event_add_decomisadoActionPerformed
+
+    private void add_entregaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_entregaActionPerformed
+        // TODO add your handling code here:
+        
+         validaciones v = new validaciones();
+        if(v.isNumeroPositivo(peso_paquete.getValue().toString()) && Double.valueOf(peso_paquete.getValue().toString())>0){
+                if(v.isNumeroPositivo(volumen_paquete.getValue().toString()) && Double.valueOf(volumen_paquete.getValue().toString())>0){
+                    boolean isFragilPaquete = is_fragil_paquete.isSelected();
+                    if(ListaproductosPaquete.size()>0){
+                        /// aqui termina lo que tienen en comun
+                        
+                        if(v.is_StringCualquieraValidoNotEmpty(p_ent_direccion_entregar.getText())){
+                            
+                             if(v.is_StringCualquieraValidoNotEmpty(p_ent_ciPropietario.getText())){
+                                boolean es_extranjero = p_ent_extranjero.isSelected();
+                                if(v.seeIfNumberIsIntegerPositivo(p_ent_cantidadPaquetesAduana.getValue().toString()) && Double.parseDouble(p_ent_cantidadPaquetesAduana.getValue().toString())>0){
+                                    /// listo añado el paquete a la empresa
+                                    
+                                    System.out.println("Añadiendo paquete a la empresa"); 
+                                    double peso=Double.valueOf(peso_paquete.getValue().toString());
+                                    double volumen=Double.valueOf(volumen_paquete.getValue().toString());
+                                    propietario p = new propietario(p_ent_ciPropietario.getText(), es_extranjero, Integer.parseInt(p_ent_cantidadPaquetesAduana.getValue().toString()));
+                                    paquete ptemporal = new paquete_entrega(p_ent_direccion_entregar.getText(),p,peso,volumen,isFragilPaquete,ListaproductosPaquete);
+                                    EmpresaAduana.addPaquete(ptemporal);
+                                    
+                                    try {
+                                        /// luego se salvara en el fichero este paquete
+                                        HandleFile.SavePaquetesEntrega(EmpresaAduana);
+                                        showMsg("Agregado correctamente Paquete Entrega");
+                                    } catch (IOException ex) {
+                                        showMsg("Error no se pudo guardar en el fichero");
+                                    }
+                                   
+                                   System.out.println("procedo a imprimir paquetes");
+                                    EmpresaAduana.ImpresionPaquetes();
+                                    clearInputs();
+                                    
+                                }else{
+                                    showMsg("Porfavor ingrese un valor valido para cantidad de paquetes en la aduana deben ser mayor que cero");
+                                }
+                            }else{
+                                showMsg("Porfavor ingrese un numero de cedula valido");
+                            } 
+                            
+                            
+                            
+                            
+                        }else{
+                            showMsg("Ingrese la direccion a entregar");
+                        }  
+                    }else{
+                        showMsg("Ingrese al menos un producto al paquete para continuar");
+                    }  
+                }else{
+                    showMsg("Error ingrese un valor valido para el volumen del paquete, mayor que cero");
+                }
+        }else{
+            showMsg("Error ingrese un valor valido para el peso del paquete, mayor que cero");
+        }
+        
+    }//GEN-LAST:event_add_entregaActionPerformed
+
+    
+    public void showMsg(String msg){
+        JOptionPane.showMessageDialog(rootPane, msg);
+    }
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(add_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(add_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(add_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(add_paquete.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new add_paquete(IntefazPrincipal).setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton add_decomisado;
+    private javax.swing.JButton add_entrega;
+    private javax.swing.JButton add_marcado;
+    private javax.swing.JButton add_productos;
+    private javax.swing.JCheckBox is_fragil_paquete;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSpinner p_de_cantidadPaquetesAduana;
+    private javax.swing.JTextField p_de_ciPropietario;
+    private javax.swing.JCheckBox p_de_extranjero;
+    private javax.swing.JTextField p_de_razonDecomiso;
+    private javax.swing.JSpinner p_ent_cantidadPaquetesAduana;
+    private javax.swing.JTextField p_ent_ciPropietario;
+    private javax.swing.JTextField p_ent_direccion_entregar;
+    private javax.swing.JCheckBox p_ent_extranjero;
+    private javax.swing.JCheckBox p_m_isdecomisado;
+    private javax.swing.JCheckBox p_m_notificar_propietario;
+    private javax.swing.JTextField p_m_razonMarcado;
+    private javax.swing.JPanel panel_comunes;
+    private javax.swing.JPanel panel_decomisado;
+    private javax.swing.JPanel panel_entrega;
+    private javax.swing.JPanel panel_marcados;
+    private javax.swing.JSpinner peso_paquete;
+    private javax.swing.JTable productos_paquete;
+    private javax.swing.JButton regresar;
+    private javax.swing.JComboBox<String> tipo_paquete;
+    private javax.swing.JSpinner volumen_paquete;
+    // End of variables declaration//GEN-END:variables
+
+    
+}
